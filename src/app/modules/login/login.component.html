@@ -1,0 +1,34 @@
+<div class="center-item d-flex justify-content-center align-items-center flex-column">
+    <form autocomplete="off">
+        <div class="header flex-column d-flex justify-content-center align-items-center">
+            <img class="company-logo " src="../../../assets/icons/Speedyy logo.svg" alt="Logo" height="100" width="100" alt="Logo" />
+            <h5 class="mt-2"><b>Coupon Dashboard</b></h5>
+        </div>
+        <div class="input-details mb-2" *ngIf="!isOtpSent; else otpInput">
+            <label class="input-heading">Phone Number</label>
+            <mat-form-field appearance="outline">
+                <input matInput [formControl]="phoneNumber" type="text" placeholder="Enter 10 digit phone number">
+            </mat-form-field>
+            <app-form-error-msg [control]="phoneNumber"></app-form-error-msg>
+        </div>
+        <ng-template #otpInput>
+            <div class="input-details">
+                <label class="input-heading">Enter verification code</label>
+                <ng-otp-input class="d-flex justify-content-center align-items-center" (onInputChange)="onOtpChange($event)" 
+                    [config]="otpInputConfig" (keydown.enter)="verifyOtp()" #otpInputField>
+                </ng-otp-input>
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+                <span>
+                    Didn't receive the OTP! 
+                    <span class="text-secondary" *ngIf="!canResendOtp">{{timeLeft}} secs left</span>
+                    <span class="cursor-enable text-secondary text-decoration-underline" *ngIf="canResendOtp" (click)="sentOtp()">Resend</span>
+                </span>
+                <span class="cursor-enable text-decoration-underline" (click)="signInAgain()">Sign in again</span>
+            </div>
+        </ng-template>
+        <button type="submit" class="w-100" (click)='!isOtpSent ? sentOtp() : verifyOtp()'>
+            <strong>{{!isOtpSent ? 'Send OTP' : 'Verify & Proceed'}}</strong>
+        </button>
+    </form>
+</div>

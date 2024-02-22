@@ -1,0 +1,316 @@
+@import "~bootstrap/scss/bootstrap";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+// @import "./assets/styles/app.scss";
+@import "~ngx-toastr/toastr";
+$primary-color: #222239;
+$background-color: #f5f9fc;
+$secondary-background-color: #b08ff3;
+$white: #fff;
+$cursor: pointer;
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 300;
+}
+
+th.mat-header-cell {
+    padding: 10px !important;
+    font-size: 20px;
+    color: $white;
+    background-color: $primary-color;
+}
+
+td.mat-cell {
+    padding: 10px !important;
+    font-size: 18px;
+    // background-color: #fff;
+    // border: 1px solid rgba(0,0,0,.12);
+}
+
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type {
+    padding-left: 35px !important;
+}
+
+tr.mat-row:nth-child(2n + 1) {
+    background-color: #b9b7d13e;
+}
+
+tr.mat-row:nth-child(2n) {
+    background-color: #b9b7d15e;
+}
+
+.mat-tab-header-pagination {
+    z-index: 0 !important;
+}
+
+.input-details {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 0.3em;
+}
+
+.input-heading {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.input-field {
+    background: $background-color;
+    border-radius: 10px;
+    padding: 0.5em 1em;
+    border: none;
+    height: 45px;
+     ::placeholder {
+        color: #a7a8ae;
+    }
+    &:focus {
+        outline: 0px;
+        -webkit-appearance: none;
+        box-shadow: none;
+    }
+}
+
+.buttons {
+    min-width: 150px !important;
+    height: 40px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $primary-color;
+    color: $white;
+    font-size: 16px;
+    font-weight: 300;
+    transition: 0.5s;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border-radius: 10px !important;
+    border: 1px solid transparent;
+}
+
+.br-50 {
+    border-radius: 50px !important;
+}
+
+.buttons--white {
+    background: transparent;
+    color: $secondary-background-color;
+    border: 1px solid $secondary-background-color;
+}
+
+.buttons--disabled {
+    background: $background-color;
+    color: #a7a8ae;
+}
+
+.buttons--filter {
+    color: #000;
+    background: $background-color;
+    justify-content: space-between;
+    &:hover {
+        background: $background-color;
+    }
+}
+
+.mat-form-field {
+    font-family: Poppins, "Helvetica Neue", sans-serif !important;
+    .mat-form-field-wrapper {
+        padding-bottom: 0 !important;
+        .mat-form-field-flex {
+            align-items: center !important;
+            height: 3rem;
+        }
+    }
+    a {
+        color: #0d1d28 !important;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+        font-size: 0.9em;
+        cursor: $cursor;
+    }
+    mat-icon {
+        cursor: $cursor;
+    }
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    padding-bottom: 1.25em !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0 1em 0 !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline .mat-form-field-outline-start {
+    border-radius: 8px 0 0 8px !important;
+    background-color: $white !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline .mat-form-field-outline-end {
+    border-radius: 0 8px 8px 0 !important;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: #0d1d28 !important;
+}
+
+.mat-form-field-disabled .mat-form-field-outline .mat-form-field-outline-end,
+.mat-form-field-outline-start {
+    background-color: #f9f9f9;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-outline {
+    color: #ccc;
+}
+
+.ng-select.ng-select-single {
+    .ng-select-container {
+        height: 2.375em;
+        border-radius: 8px;
+        .ng-value-container {
+            .ng-input {
+                top: auto;
+            }
+        }
+    }
+}
+
+.ng-select.ng-select-multiple {
+    .ng-select-container {
+        min-height: 45px !important;
+        background: $background-color;
+        border-radius: 10px;
+        border: none !important;
+        .ng-value-container {
+            .ng-placeholder {
+                top: auto;
+            }
+        }
+    }
+}
+
+.modal-ng-select {
+    .ng-select-container {
+        background-color: $white !important;
+    }
+    .ng-dropdown-panel.ng-select-bottom {
+        .ng-option {
+            background: $white !important;
+        }
+        .ng-option-marked {
+            background: $white !important;
+        }
+    }
+}
+
+.ng-select.ng-invalid.ng-touched .ng-select-container {
+    border: 2px solid #f44336;
+}
+
+.ng-select.ng-select-disabled>.ng-select-container {
+    color: rgba(0, 0, 0, 0.38);
+    background-color: #f9f9f9 !important;
+}
+
+.ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
+    border: 2px solid #0d1d28 !important;
+    box-shadow: none;
+}
+
+app-form-error-msg ul {
+    list-style-type: none;
+    padding: 5px 0px 5px 12px;
+    font-size: 12px;
+    margin: 0px;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: $secondary-background-color;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: $secondary-background-color;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple {
+    background-color: transparent !important;
+}
+
+.mat-radio-button .mat-ripple-element {
+    background-color: $secondary-background-color !important;
+}
+
+.mat-menu-panel {
+    min-height: fit-content !important;
+}
+
+.mat-menu-content {
+    padding: 1rem;
+}
+
+mat-icon {
+    cursor: $cursor;
+}
+
+.cursor-enable {
+    cursor: $cursor;
+}
+
+.cursor-disable {
+    cursor: not-allowed;
+}
+
+.mat-checkbox .mat-checkbox-frame {
+    border-color: rgba(0, 0, 0, 0.12);
+    background-color: white;
+}
+
+.mat-checkbox .mat-ripple-element {
+    background-color: #b08ff3 !important;
+}
+
+.mat-checkbox.mat-accent .mat-checkbox-background .mat-checkbox-frame,
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    border-color: #b08ff3;
+    background-color: #b08ff3;
+}
+
+.timepicker {
+    border: 2px solid #0d1d28;
+}
+
+.timepicker__header {
+    background-color: #222239 !important;
+}
+
+.clock-face {
+    --clock-hand-color: #222239;
+}
+
+.timepicker-dial__item_active {
+    color: #ffffff !important;
+}
+
+.clock-face__number>span.active {
+    color: #ffffff !important;
+}
+
+.timepicker-button {
+    color: #222239 !important;
+}
+
+.custom-tooltip {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.singleline-ellipsis {
+    text-overflow: ellipsis;
+    max-width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+}

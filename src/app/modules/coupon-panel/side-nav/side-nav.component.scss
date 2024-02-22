@@ -1,0 +1,82 @@
+.side-nav {
+    width: 265px;
+    height: 100vh;
+    overflow-y: auto;
+    background: #222239;
+    border-right: 0.5px solid #dbeeff;
+    transition: 0.3s;
+    color: white;
+    font-size: 20px;
+    text-transform: capitalize;
+    position: sticky;
+    top: 0;
+    &__header {
+        font-weight: 600;
+        padding: 20px;
+        .logo {
+            height: 90px;
+        }
+        .welcome-user {
+            .welcome {
+                font-size: 22px;
+                text-align: center;
+            }
+            .user-name {
+                font-size: 20px;
+            }
+            .role {
+                font-size: 14px;
+                text-align: center;
+            }
+        }
+    }
+    .nav-links {
+        ul {
+            list-style-type: none;
+            padding: 0;
+            li {
+                cursor: pointer;
+                a {
+                    padding: 10px 20px;
+                    text-decoration: none;
+                    color: white;
+                    font-size: 20px;
+                    .nav-icon {
+                        margin-right: 12px;
+                        height: 20px;
+                        width: 20px;
+                        vertical-align: baseline;
+                    }
+                    .expand-button {
+                        margin-top: 0.2em;
+                        transition: 100ms ease-in-out;
+                        transform: rotate(0deg);
+                    }
+                    .rotated {
+                        transform: rotate(180deg);
+                    }
+                }
+                .submenu {
+                    padding: 0;
+                    a,
+                    label {
+                        padding-left: 40px;
+                        font-size: 18px;
+                        font-weight: 600;
+                        p {
+                            font-size: 14px;
+                            font-style: italic;
+                        }
+                    }
+                }
+                .nav-link-active {
+                    background: #9b9be21f;
+                }
+                &:hover {
+                    background: #9b9be21f;
+                    ;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,195 @@
+<div class="coupon-form-wrapper w-50">
+    <h3>{{disableAll ? 'VIEW COUPON' : 'CREATE NEW COUPON'}}</h3>
+    <form [formGroup]="couponForm" class="gap-5">
+        <div class="input-details">
+            <label class="input-heading mt-4">Coupon Code</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="text" placeholder="Enter Coupon Code" formControlName="couponName"
+                    (input)="convertToUppercase($event)">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.couponName"></app-form-error-msg>
+        </div>
+        <div class="input-details">
+            <label class="input-heading mt-4">Coupon Header</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="text" placeholder="Enter Coupon Header" formControlName="couponHeader">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.couponHeader"></app-form-error-msg>
+        </div>
+        <div class="input-details">
+            <label class="input-heading mt-4">Coupon Description</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="textarea" placeholder="Enter Coupon Description" formControlName="couponDesc">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.couponDesc"></app-form-error-msg>
+        </div>
+        <div class="input-details">
+            <label class="input-heading mt-4">Coupon terms & conditions</label>
+            <mat-form-field appearance="outline">
+                <input type="textarea" matInput formControlName="termsAndConditions" placeholder="Type here">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.termsAndConditions"></app-form-error-msg>
+        </div>
+        <div class="input-details" *ngIf="service !== Services.PND">
+            <label class="input-heading mt-4">Coupon Level</label>
+            <ng-select id="couponLevel" name="couponLevel" class="modal-ng-select w-100 mt-2"
+                formControlName="couponLevel" [items]="couponLevelOptions" bindValue="id" bindLabel="name"
+                placeholder="Select Discount Type" (change)="onCouponLevelSelection()">
+            </ng-select>
+            <app-form-error-msg [control]="couponForm.controls.couponLevel"></app-form-error-msg>
+        </div>
+        
+        <!-- <label class="input-heading">Is Customer Specific Coupon?</label>
+        <div class="input-field">
+            <div class="radio-btn">
+                <div class="checkbox radio">
+                    <input type="radio" [value]="true" name="hasCustomerSpecific" formControlName="hasCustomerSpecific" (change)="haveCustomerSpecificCoupon()" />
+                </div>&nbsp; &nbsp;&nbsp; &nbsp;
+                <div class="radio-btn__name">Yes</div>
+                <div class="checkbox radio">
+                    <input type="radio" [value]="false" name="hasCustomerSpecific" formControlName="hasCustomerSpecific" (change)="haveCustomerSpecificCoupon()" />
+                </div>&nbsp; &nbsp;&nbsp; &nbsp;
+                <div class="radio-btn__name">No</div>
+            </div>
+            <div class="col-2 input-details">
+                <label for="name" class="input-heading">Blocked Riders?</label>
+                <mat-radio-group [(ngModel)]="isCustomerSpecific" class="mt-2">
+                    <mat-radio-button [value]="true" class="input-heading me-3">Yes</mat-radio-button>
+                    <mat-radio-button [value]="false" class="input-heading">No</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div> -->
+        
+        <div *ngIf="couponForm.get('couponLevel').value === 'global'">
+            <div class="input-details">
+                <label class="input-heading mt-4">Customer Id (Optional)</label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="text" placeholder="Enter Customer Id" formControlName="customerId">
+                </mat-form-field>
+                <app-form-error-msg [control]="couponForm.controls.customerId"></app-form-error-msg>
+            </div>
+            <div class="input-details">
+                <label class="input-heading mt-4">Order Id (Optional)</label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="text" placeholder="Enter Order Id" formControlName="orderId">
+                </mat-form-field>
+                <app-form-error-msg [control]="couponForm.controls.orderId"></app-form-error-msg>
+            </div>
+            <div class="input-details">
+                <label class="input-heading mt-4">Creation Reason (Optional)</label>
+                <mat-form-field appearance="outline">
+                    <input type="textarea" matInput formControlName="creationReason" placeholder="Enter Creation Reason">
+                </mat-form-field>
+                <app-form-error-msg [control]="couponForm.controls.creationReason"></app-form-error-msg>
+            </div>
+        </div>
+
+        <div class="input-details" *ngIf="isRestaurantLevelCoupon">
+            <label class="input-heading mt-4">Discount Sponsered By</label>
+            <ng-select id="couponLevel" name="couponLevel" class="modal-ng-select w-100 mt-2"
+                formControlName="discountSponseredBy" [items]="discountSponseredByOptions" bindValue="id"
+                bindLabel="name" placeholder="Select Discount Type">
+            </ng-select>
+            <app-form-error-msg [control]="couponForm.controls.discountSponseredBy"></app-form-error-msg>
+        </div>
+        <div class="input-details" *ngIf="isRestaurantLevelCoupon">
+            <label class="input-heading mt-4">Discount share (in %)</label>
+            <label>(NOTE: Discount share should be borne by discount sponsored)</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="text" placeholder="Enter Discount Share"
+                    formControlName="discountSharePercentage">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.discountSharePercentage"></app-form-error-msg>
+        </div>
+        <div class="input-details">
+            <label class="input-heading mt-4">Discount Type</label>
+            <ng-select id="discountType" name="discountType" class="modal-ng-select w-100 mt-2"
+                formControlName="discountType" [items]="discountTypeOptions" bindValue="id" bindLabel="name"
+                placeholder="Select Discount Type" (change)="onDiscountTypeSelection()">
+            </ng-select>
+            <app-form-error-msg [control]="couponForm.controls.discountType"></app-form-error-msg>
+        </div>
+        <div class="input-details">
+            <label class="input-heading mt-4">{{isUptoDiscountType ? 'Discount (in %)' : 'Discount (in
+                &#8377;)'}}</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="number" placeholder="Enter Discount" formControlName="discount">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.discount"></app-form-error-msg>
+        </div>
+        <div class="input-details">
+            <label class="input-heading mt-4">Minimum Order Value (in &#8377;)</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="number" placeholder="Enter Min Order Value" formControlName="minOrderValue">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.minOrderValue"></app-form-error-msg>
+        </div>
+        <div class="input-details" *ngIf="isUptoDiscountType">
+            <label class="input-heading mt-4">Maximum Discount Upto (in &#8377;)</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="number" placeholder="Enter Max Discount Upto" formControlName="maxDiscountUpto">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.maxDiscountUpto"></app-form-error-msg>
+        </div>
+        <div class="row">
+            <div class="input-details col-6">
+                <label class="input-heading mt-4">Start Date</label>
+                <mat-form-field appearance="outline">
+                    <input matInput formControlName="couponStartDate" (click)="startDate.open()"
+                        [matDatepicker]="startDate" [min]="minDate" [readonly]="true" name="startDate"
+                        placeholder="Select date" ngDefaultControl>
+                    <mat-datepicker-toggle [for]="startDate" matSuffix></mat-datepicker-toggle>
+                    <mat-datepicker #startDate></mat-datepicker>
+                </mat-form-field>
+                <app-form-error-msg [control]="couponForm.controls.couponStartDate"></app-form-error-msg>
+            </div>
+            <div class="input-details col-6">
+                <label class="input-heading mt-4">Start Time</label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="time" name="startTime" formControlName="couponStartTime"
+                        placeholder="Select time">
+                    <!-- <ngx-material-timepicker-toggle matSuffix [for]="startTime"></ngx-material-timepicker-toggle>
+                    <ngx-material-timepicker #startTime [defaultTime]="currentTime"></ngx-material-timepicker> -->
+                </mat-form-field>
+                <app-form-error-msg [control]="couponForm.controls.couponStartTime"></app-form-error-msg>
+            </div>
+            <div class="input-details col-6">
+                <label class="input-heading mt-4">End Date</label>
+                <mat-form-field appearance="outline">
+                    <input matInput formControlName="couponEndDate" (click)="endDate.open()" [matDatepicker]="endDate"
+                        [min]="minDate" [readonly]="true" name="endDate" placeholder="Select date" ngDefaultControl>
+                    <mat-datepicker-toggle [for]="endDate" matSuffix></mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                </mat-form-field>
+                <app-form-error-msg [control]="couponForm.controls.couponEndDate"></app-form-error-msg>
+            </div>
+            <div class="input-details col-6 mt-4">
+                <label class="input-heading">End Time</label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="time" name="endTime" formControlName="couponEndTime"
+                        placeholder="Select time">
+                    <!-- <ngx-material-timepicker-toggle matSuffix [for]="endTime"></ngx-material-timepicker-toggle>
+                    <ngx-material-timepicker #endTime [defaultTime]="currentTime"></ngx-material-timepicker> -->
+                </mat-form-field>
+                <app-form-error-msg [control]="couponForm.controls.couponEndTime"></app-form-error-msg>
+            </div>
+        </div>
+        <div class="input-details">
+            <label class="input-heading mt-4">Max Use Count</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="number" placeholder="Enter" formControlName="maxUseCount">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.maxUseCount"></app-form-error-msg>
+        </div>
+        <div class="input-details" *ngIf="showCouponUsageIntervalField">
+            <label class="input-heading mt-4">Coupon Usage Interval (in minutes)</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="number" placeholder="Enter" formControlName="couponUsageIntervalinMins">
+            </mat-form-field>
+            <app-form-error-msg [control]="couponForm.controls.couponUsageIntervalinMins"></app-form-error-msg>
+        </div>
+    </form>
+    <button class="buttons w-25 h-3 mt-4 float-end" (click)="createCoupon()" *ngIf="!disableAll">CREATE</button>
+    <button class="buttons w-25 h-3 mt-4 float-start" [routerLink]="['/coupon']">BACK</button>
+
+</div>

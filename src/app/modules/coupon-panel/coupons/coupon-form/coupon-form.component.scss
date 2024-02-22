@@ -1,0 +1,16 @@
+.text-area {
+    padding: 1.25em 1.25em 0.7em;
+    border-radius: 12px;
+    border: 1px solid #e7ecef;
+    color: #000;
+    width: 100%;
+    min-height: 6em;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

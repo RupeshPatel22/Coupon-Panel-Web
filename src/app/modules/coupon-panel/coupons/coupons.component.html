@@ -1,0 +1,193 @@
+<div class="coupon-wrapper">
+    <section>
+        <h3>Coupons</h3>
+        <div class="row w-100 mt-4">
+            <div class="col-6 input-details">
+                <label for="search" class="input-heading">Search</label>
+                <input type="text" class="input-field" placeholder="Search by coupon id or coupon name..." name="search" [(ngModel)]="search" (keydown.enter)="getCouponsData(true)">
+            </div>
+            <div class="col-3 mt-4">
+                <button class="buttons buttons--filter w-100 mt-2" (click)="showFilterFields ? clearFilterControls('all') : showFilterFields = true">
+                    {{showFilterFields ? 'Clear Filters' : 'Add Filters'}}
+                    <img src="assets/icons/filter.svg" class="ms-4" alt="add-icon" />
+                </button>
+            </div>
+            <!-- <div class="col-3 mt-4">
+                <button class="buttons br-50" (click)="showFilterFields ? clearFilterControls('all') : showFilterFields = true">  {{showFilterFields ? 'Clear Filters' : 'Add Filters'}}</button>
+            </div> -->
+
+        </div>
+        <!-- filter -->
+        <div class="row align-items-end mt-4 w-100" *ngIf="showFilterFields">
+            <div class="input-details col-2" *ngIf="service !== services.PND">
+                <label class="input-heading ">Coupon Level</label>
+                <ng-select class="mb-2" [items]="couponLevelOptions[service]" bindValue="id" bindLabel="name" placeholder="Select coupon level" [closeOnSelect]="true" (clear)="clearFilterControls()" [(ngModel)]="filterByCouponlevel">
+                </ng-select>
+            </div><div class="input-details col-2">
+                <label class="input-heading ">Is Deleted</label>
+                <ng-select class="mb-2" [items]="hasCouponDeleted" bindValue="id" bindLabel="name" placeholder="Select Option" [closeOnSelect]="true" (clear)="clearFilterControls()" [(ngModel)]="filterByIsDeleted">
+                </ng-select>
+            </div>
+            <div class="input-details col-2">
+                <label class="input-heading">Start Date</label>
+                <mat-form-field appearance="outline">
+                    <input matInput (click)="startDate.open()" [matDatepicker]="startDate" [readonly]="true" name="startDate" placeholder="Select date" [(ngModel)]="fromDate" ngDefaultControl>
+                    <mat-datepicker-toggle matSuffix [for]="startDate" matSuffix></mat-datepicker-toggle>
+                    <mat-datepicker #startDate></mat-datepicker>
+                    <button mat-icon-button matSuffix *ngIf="fromDate" (click)="clearFilterControls('date')">
+                        <mat-icon>clear</mat-icon>
+                      </button>
+                </mat-form-field>
+            </div>
+            <div class="input-details col-2">
+                <label class="input-heading">Start Time</label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="time" name="fromTime" placeholder="Select Start Time" [(ngModel)]="fromTime">
+                    <button mat-icon-button matSuffix *ngIf="fromTime" (click)="clearFilterControls('fromTime')">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+            <div class="input-details col-2">
+                <label class="input-heading">End Date</label>
+                <mat-form-field appearance="outline">
+                    <input matInput (click)="endDate.open()" [matDatepicker]="endDate" [readonly]="true" name="endDate" placeholder="Select date" [min]="fromDate" [(ngModel)]="toDate" ngDefaultControl>
+                    <mat-datepicker-toggle matSuffix [for]="endDate" matSuffix></mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                    <button mat-icon-button matSuffix *ngIf="toDate" (click)="clearFilterControls('date')">
+                        <mat-icon>clear</mat-icon>
+                      </button>
+                </mat-form-field>
+            </div>
+            <div class="input-details col-2">
+                <label class="input-heading">End Time</label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="time" name="toTime" placeholder="Select End Time" [(ngModel)]="toTime">
+                    <button mat-icon-button matSuffix *ngIf="toTime" (click)="clearFilterControls('toTime')">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+            <div class="col-2 d-flex mt-2">
+                <button class="buttons br-50 mx-3" (click)="getCouponsData(true)"> Apply Filter</button>
+            </div>
+        </div>
+        <!-- end of filter by date -->
+        <table class="w-100 mt-5" mat-table [dataSource]="couponsList" matSort>
+            <ng-container matColumnDef="sr no">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr No </th>
+                <td mat-cell *matCellDef="let row; let i= index"> {{ (paginatorRef.pageIndex * paginatorRef.pageSize) + (i + 1) }} </td>
+            </ng-container>
+            <ng-container matColumnDef="couponId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Coupon ID </th>
+                <td mat-cell *matCellDef="let row; let i= index">
+                    <span class="d-flex gap-3 align-items-center">
+                        <strong>{{row.couponId}}</strong>
+                        <img class="cursor-enable" src="../../../../assets/icons/copy-icon.svg" width="15" height="15"
+                            alt="" (click)="copyText(row.couponId)">
+                    </span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="couponName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Coupon Name </th>
+                <td mat-cell *matCellDef="let row; let i= index">
+                    <span class="d-flex gap-3 align-items-center">
+                        <strong>{{row.couponName}}</strong>
+                        <img class="cursor-enable" src="../../../../assets/icons/copy-icon.svg" width="15" height="15"
+                            alt="" (click)="copyText(row.couponName)">
+                    </span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="couponHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Coupon Header </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row; let i= index"> {{ row.couponHeader }} </td>
+            </ng-container>
+            <ng-container matColumnDef="couponLevel">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Coupon Level </th>
+                <td class="cursor-disable text-capitalize" mat-cell *matCellDef="let row; let i= index"> {{ row.couponLevel }} </td>
+            </ng-container>
+            <ng-container matColumnDef="createdBy">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Created By </th>
+                <td class="cursor-disable text-capitalize" mat-cell *matCellDef="let row; let i= index">
+                    <span class="d-flex flex-column">
+                        <label>{{ row.createdByName }}</label> <label *ngIf="service !== services.PND"><strong>({{row.createdBy}})</strong></label>
+                    </span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Created At </th>
+                <td class="cursor-disable text-capitalize" mat-cell *matCellDef="let row; let i= index">
+                    <span class="d-flex flex-column">
+                        <label>{{ row.createdAt }}</label>
+                    </span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="couponValidFrom">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Valid From </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row">
+                    {{row.couponValidFrom | date: dateShortTimeFormat}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="couponValidTill">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Valid Till </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row"> {{row.couponValidTill | date: dateShortTimeFormat}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                <td class="" mat-cell *matCellDef="let row">
+                    <img class="ms-4" matTooltip="{{couponStatusList[row.couponStatus]}}" matTooltipClass="custom-tooltip" src='{{"assets/icons/" + row.couponStatus + "-status.svg"}}' alt="">
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="isDeleted">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Is Deleted </th>
+                <td class="cursor-disable text-center" mat-cell *matCellDef="let row"> {{row.isDeleted? 'Yes' : 'No'}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="action">
+                <th class="cursor-disable" mat-header-cell *matHeaderCellDef>Action </th>
+                <td mat-cell *matCellDef="let row">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <div class="">
+                            <table>
+                                <tr class="cursor-enable" (click)="goToViewCouponPage(row.couponId)">
+                                    <td>View Coupon&nbsp;&nbsp;</td>
+                                    <td>
+                                        <mat-icon>remove_red_eye</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr class="cursor-enable" (click)="goToCloneCouponPage(row.couponId)">
+                                    <td>Clone Coupon&nbsp;&nbsp;</td>
+                                    <td>
+                                        <mat-icon>file_copy</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr class="cursor-enable" (click)="goToSubsriptionsPage(row.couponId)" *ngIf="row.couponLevel !== 'global'">
+                                    <td>View Subscriptions&nbsp;&nbsp;</td>
+                                    <td>
+                                        <mat-icon>remove_red_eye</mat-icon>
+                                    </td>
+                                </tr>
+                                <tr class="cursor-enable" (click)="deleteCoupon(row.couponId)" *ngIf="row.isDeleted !== true">
+                                    <td>Delete Coupon&nbsp;&nbsp;</td>
+                                    <td>
+                                        <mat-icon>delete</mat-icon>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </mat-menu>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="10">There is no matching data !!!</td>
+            </tr>
+        </table>
+        <mat-paginator #paginatorRef [length]="totalCoupons" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]" (page)="onPageChange($event)"></mat-paginator>
+    </section>
+</div>

@@ -1,0 +1,125 @@
+<div class="row">
+    <!--OPT-IN DISCOUNT-->
+    <div class="col-6">
+        <h3>OPT-IN Discount</h3>
+        <form [formGroup]="optinOutletsForm" class="w-75 gap-5">
+            <div class="input-details">
+                <label class="input-heading mt-4">Coupon Id</label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="text" placeholder="Enter Coupon Id" formControlName="couponId" (input)="onInputValueChange()">
+                    <a matSuffix (click)="getCouponDetail()" *ngIf="optinOutletsForm.controls.couponId?.value?.length">Get Detail</a>
+                </mat-form-field>
+                <app-form-error-msg [control]="optinOutletsForm.controls.couponId"></app-form-error-msg>
+            </div>
+            <div class="input-details">
+                <label class="input-heading mt-4">Outlet Ids</label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="textarea" placeholder="Enter comma separated Outlet Ids" formControlName="outletIds">
+                </mat-form-field>
+                <app-form-error-msg [control]="optinOutletsForm.controls.outletIds"></app-form-error-msg>
+            </div>
+            <div class="row">
+                <p class="text-secondary mt-4">*Select custom duration (optional)</p>
+                <div class="input-details col-6">
+                    <label class="input-heading mt-2">Start Date</label>
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="startDate" (click)="startingDate.open()" [matDatepicker]="startingDate" [min]="minDate" [readonly]="true" name="startDate" placeholder="Select date" ngDefaultControl>
+                        <mat-datepicker-toggle [for]="startingDate" matSuffix></mat-datepicker-toggle>
+                        <mat-datepicker #startingDate></mat-datepicker>
+                    </mat-form-field>
+                    <app-form-error-msg [control]="optinOutletsForm.controls.startDate"></app-form-error-msg>
+                </div>
+                <div class="input-details col-6">
+                    <label class="input-heading mt-2">Start Time</label>
+                    <mat-form-field appearance="outline">
+                        <input matInput type="time" name="startTime" formControlName="startTime" placeholder="Select time">
+                        <!-- <ngx-material-timepicker-toggle matSuffix [for]="startingTime "></ngx-material-timepicker-toggle>
+                        <ngx-material-timepicker #startingTime [defaultTime]="currentTime "></ngx-material-timepicker> -->
+                    </mat-form-field>
+                    <app-form-error-msg [control]="optinOutletsForm.controls.startTime"></app-form-error-msg>
+                </div>
+                <div class="input-details col-6">
+                    <label class="input-heading mt-2">End Date</label>
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="endDate" (click)="endingDate.open()" [matDatepicker]="endingDate" [min]="minDate" [readonly]="true" name="endDate" placeholder="Select date" ngDefaultControl>
+                        <mat-datepicker-toggle [for]="endingDate" matSuffix></mat-datepicker-toggle>
+                        <mat-datepicker #endingDate></mat-datepicker>
+                    </mat-form-field>
+                    <app-form-error-msg [control]="optinOutletsForm.controls.endDate"></app-form-error-msg>
+                </div>
+                <div class="input-details col-6">
+                    <label class="input-heading mt-2">End Time</label>
+                    <mat-form-field appearance="outline">
+                        <input matInput type="time" name="endTime" formControlName="endTime" placeholder="Select time">
+                        <!-- <ngx-material-timepicker-toggle matSuffix [for]="endingTime "></ngx-material-timepicker-toggle>
+                        <ngx-material-timepicker #endingTime [defaultTime]="currentTime "></ngx-material-timepicker> -->
+                    </mat-form-field>
+                    <app-form-error-msg [control]="optinOutletsForm.controls.endTime"></app-form-error-msg>
+                </div>
+            </div>
+        </form>
+        <div class="d-flex">
+            <button class="buttons ms-2 h-3 mt-4" (click)="optinOutlets()">Apply</button>
+        </div>
+    </div>
+    <!--OPT-OUT-->
+    <div class="col-6">
+        <h3>OPT-OUT Discount</h3>
+        <form [formGroup]="optoutOutletsForm" class="w-75">
+            <div class="input-details">
+                <label class="input-heading mt-4">Coupon Mapping Ids</label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="textarea" placeholder="Enter comma separated mapping Ids" formControlName="mappingIds">
+                </mat-form-field>
+                <app-form-error-msg [control]="optoutOutletsForm.controls.mappingIds"></app-form-error-msg>
+            </div>
+        </form>
+        <div class="d-flex">
+            <button class="buttons ms-2 h-3 mt-4" (click)="optoutOutlets()">Apply</button>
+        </div>
+    </div>
+    <div class="mt-3" *ngIf="isCouponDetail">
+        <table class="w-100" mat-table [dataSource]="couponDetail" matSort>
+            <ng-container matColumnDef="couponId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Coupon Id </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row"> {{ row.couponId }} </td>
+            </ng-container>
+            <ng-container matColumnDef="couponName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Coupon Name </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row"> {{ row.couponName }} </td>
+            </ng-container>
+            <ng-container matColumnDef="couponLevel">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Coupon Level </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row"> {{ row.couponLevel }} </td>
+            </ng-container>
+            <ng-container matColumnDef="createdBy">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Created By </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row"> {{ row.createdBy }} </td>
+            </ng-container>
+            <ng-container matColumnDef="couponStartDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row"> {{ row.couponStartDate }} </td>
+            </ng-container>
+            <ng-container matColumnDef="couponStartTime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Time </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row"> {{ row.couponStartTime }} </td>
+            </ng-container>
+            <ng-container matColumnDef="couponEndDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row"> {{ row.couponEndDate }} </td>
+            </ng-container>
+            <ng-container matColumnDef="couponEndTime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>End Time </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row"> {{ row.couponEndTime }} </td>
+            </ng-container>
+            <ng-container matColumnDef="couponStatus">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status </th>
+                <td class="cursor-disable" mat-cell *matCellDef="let row">
+                    <img matTooltip="{{couponDetail[row.couponStatus]}}" matTooltipClass="custom-tooltip" src='{{"assets/icons/" + row.couponStatus + "-status.svg"}}' alt="">
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

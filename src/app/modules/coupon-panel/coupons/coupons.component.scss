@@ -1,0 +1,75 @@
+.coupon-wrapper {
+    &__coupon {
+        border-radius: 5px;
+        height: fit-content;
+        background-color: #DBEEFF;
+        padding: 40px;
+        .coupon-left {
+            .heading {
+                font-size: 30px;
+                letter-spacing: 1px;
+            }
+            .code {
+                color: #000000B2;
+            }
+            .view-button {
+                background: #B08FF3;
+                border-radius: 5px;
+                border: none;
+                width: 143px;
+                height: 34px;
+                color: white;
+            }
+        }
+        .coupon-right {
+            border-radius: 5px;
+            width: 208px;
+            height: fit-content;
+            background: #B08FF3;
+            color: white;
+            padding: 20px 30px;
+            .discount-percentage {
+                .discount {
+                    font-size: 24px;
+                }
+                .description {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+.fliter-btn {
+    margin-top: 2rem;
+}
+
+input[type="checkbox"][role=switch] {
+    appearance: none;
+    box-sizing: content-box;
+    cursor: pointer;
+    width: 37px;
+    height: 18px;
+    background-color: #939DA2;
+    border-radius: 34px;
+    transition: all 300ms ease;
+}
+
+input[type="checkbox"][role=switch]:after {
+    content: '';
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    transform: translate(2px, 2px);
+    background-color: #FFF;
+    transition: all 300ms ease;
+}
+
+input[type="checkbox"][role=switch].enabled {
+    background-color: #04A971;
+}
+
+input[type="checkbox"][role=switch].enabled:after {
+    transform: translate(21px, 2px);
+}

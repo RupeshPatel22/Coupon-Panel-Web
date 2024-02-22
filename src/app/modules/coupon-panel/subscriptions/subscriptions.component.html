@@ -1,0 +1,154 @@
+<div class="row w-100 align-items-end">
+    <h3>Outlet Subscriptions</h3>
+    <div class="row w-100 mt-4">
+        <div class="col-6 input-details">
+            <label for="search" class="input-heading">Search</label>
+            <input type="text" class="input-field m-0" placeholder="Search by coupon id" name="search" [(ngModel)]="search"
+                (keydown.enter)="getCouponOutletMappingData(true)">
+        </div>
+        <div class="col-3 mt-4">
+            <button class="buttons buttons--filter w-100 mt-2"
+                (click)="showFilterFields ? clearFilterControls('all') : showFilterFields = true">
+                {{showFilterFields ? 'Clear Filters' : 'Add Filters'}}
+                <img src="assets/icons/filter.svg" class="ms-4" alt="add-icon" />
+            </button>
+        </div>
+    </div>
+    <div class="row align-items-end mt-4 w-100" *ngIf="showFilterFields">
+        <div class="col-2 input-details">
+            <label for="search" class="input-heading">Outlet ID</label>
+            <input type="text" class="input-field m-0" placeholder="Enter outlet id" name="filterByOutletId"
+                [(ngModel)]="filterByOutletId" (keydown.enter)="getCouponOutletMappingData(true)">
+        </div>
+        <div class="input-details col-2">
+            <label class="input-heading">Coupon Status</label>
+            <ng-select [items]="couponStatusList| keyvalue" bindValue="key" bindLabel="value"
+                placeholder="Select Status" [multiple]="true" [closeOnSelect]="false" (clear)="clearFilterControls()"
+                [(ngModel)]="filterByCouponStatus">
+            </ng-select>
+        </div>
+        <div class="input-details col-2">
+            <label class="input-heading">Start Date</label>
+            <mat-form-field appearance="outline">
+                <input matInput (click)="startDate.open()" [matDatepicker]="startDate" [readonly]="true"
+                    name="startDate" placeholder="Select date" [(ngModel)]="fromDate" ngDefaultControl>
+                <mat-datepicker-toggle matSuffix [for]="startDate" matSuffix></mat-datepicker-toggle>
+                <mat-datepicker #startDate></mat-datepicker>
+                <button mat-icon-button matSuffix *ngIf="fromDate" (click)="clearFilterControls('date')">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="input-details col-2">
+            <label class="input-heading">Start Time</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="time" name="fromTime" placeholder="Select Start Time" [(ngModel)]="fromTime">
+                <button mat-icon-button matSuffix *ngIf="fromTime" (click)="clearFilterControls('fromTime')">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="input-details col-2">
+            <label class="input-heading">End Date</label>
+            <mat-form-field appearance="outline">
+                <input matInput (click)="endDate.open()" [matDatepicker]="endDate" [readonly]="true" name="endDate"
+                    placeholder="Select date" [(ngModel)]="toDate" ngDefaultControl>
+                <mat-datepicker-toggle matSuffix [for]="endDate" matSuffix></mat-datepicker-toggle>
+                <mat-datepicker #endDate></mat-datepicker>
+                <button mat-icon-button matSuffix *ngIf="toDate" (click)="clearFilterControls('date')">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="input-details col-2">
+            <label class="input-heading">End Time</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="time" name="toTime" placeholder="Select End Time" [(ngModel)]="toTime">
+                <button mat-icon-button matSuffix *ngIf="toTime" (click)="clearFilterControls('toTime')">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="col-2 d-flex mt-4">
+            <button class="buttons br-50 mx-3" (click)="getCouponOutletMappingData(true)"> Apply Filter</button>
+
+        </div>
+    </div>
+    <table class="w-100 mt-5" mat-table [dataSource]="mappingDetailsList" matSort>
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Mapping Id </th>
+            <td mat-cell *matCellDef="let row; let i= index"> {{row.id}} </td>
+        </ng-container>
+        <ng-container matColumnDef="couponCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Coupon Details</th>
+            <td mat-cell *matCellDef="let row; let i= index">
+                <strong>{{ row.couponCode }} </strong>
+
+                <span class="d-flex gap-3 align-items-center">
+                    <strong>{{row.couponId}}</strong>
+                    <img class="cursor-enable" src="../../../../assets/icons/copy-icon.svg" width="15" height="15"
+                        alt="" (click)="copyText(row.couponId)">
+                </span>
+
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="outletName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Outlet Details </th>
+            <td mat-cell *matCellDef="let row; let i= index">
+                <strong matTooltip="Go to Admin Dashboard" matTooltipClass="custom-tooltip"
+                    class="text-decoration-underline cursor-enable"
+                    (click)="goToAdminDashbardWebsite(row.outletId, row.outletName)">{{
+                    row.outletName }}</strong>
+                <p class="m-0">
+                    <span class="d-flex align-items-center gap-3 w-75">
+                        <label class="singleline-ellipsis ">{{row.outletId}}</label>
+                        <img class="cursor-enable" src="../../../../assets/icons/copy-icon.svg" width="15" height="15"
+                            alt="" (click)="copyText(row.outletId)">
+                    </span>
+                </p>
+
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="mappedBy">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Mapped By</th>
+            <td mat-cell *matCellDef="let row; let i= index"> {{ row.mappedByUserName }} </td>
+        </ng-container>
+        <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
+            <td mat-cell *matCellDef="let row; let i= index"> {{ row.startDate | date : dateShortTimeFormat}}</td>
+        </ng-container>
+        <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+            <td mat-cell *matCellDef="let row; let i= index"> {{ row.endDate | date : dateShortTimeFormat}} </td>
+        </ng-container>
+        <ng-container matColumnDef="couponStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status </th>
+            <td mat-cell *matCellDef="let row; let i= index">
+                <img matTooltip="{{couponStatusList[row.couponStatus]}}" matTooltipClass="custom-tooltip"
+                    src='{{"assets/icons/" + row.couponStatus + "-status.svg"}}' alt="">
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="isDeleted">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Is Opted Out? </th>
+            <td mat-cell *matCellDef="let row; let i= index"> {{ row.isDeleted ? 'Yes' : 'No' }} </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th class="cursor-disable" mat-header-cell *matHeaderCellDef>Action </th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="row.couponStatus !== 'expired'">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <div class="cursor-enable" (click)="optoutOutlet(row)">Opt-Out</div>
+                </mat-menu>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="8">There is no matching data !!!</td>
+        </tr>
+    </table>
+    <mat-paginator #paginatorRef [length]="totalMappingData" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]"
+        (page)="onPageChange($event)"></mat-paginator>
+</div>
